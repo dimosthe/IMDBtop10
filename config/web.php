@@ -37,7 +37,10 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
+				'db' => require(__DIR__ . '/db.php'),
+				'imdbConnector' =>[
+						'class'=>'app\components\imdbConnector', 
+				]
     ],
     'params' => $params,
 ];

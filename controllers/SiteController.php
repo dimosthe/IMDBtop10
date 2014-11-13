@@ -49,7 +49,11 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+		 $imdb = new Yii::$app->imdbConnector(true, true, 0); 
+        $movies = $imdb->chart_top(); 	
+				return $this->render('index',[
+					'movies'=>$movies
+				]);
     }
 
     public function actionLogin()
