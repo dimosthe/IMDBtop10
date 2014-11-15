@@ -96,11 +96,3 @@ class ImdbscraperController extends Controller {
 		
 	}	
 }
-
-//$imdb = new imdbScraper();
-//print_r($imdb->parseHtml());
-
-	
-
-
-

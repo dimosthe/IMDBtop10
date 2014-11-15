@@ -8,6 +8,10 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\DateForm;
+use app\models\Dates;
+use app\models\DatesMovies;
+use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
@@ -49,8 +53,32 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-			
-				return $this->render('index');
+		$dateForm = new DateForm();	
+		if ($dateForm->load(Yii::$app->request->post()) && $dateForm->validate()) 
+        {
+             
+            $date = Dates::findOne([
+                'date'=>$dateForm->date
+            ]);
+
+
+            
+
+                $provider = new ActiveDataProvider([
+                    'query' => DatesMovies::find()
+                        ->where(['date_id' => $date->id])
+                        ->orderBy('rank')
+    
+                ]);
+
+             return $this->render('index', [
+                'dateForm' => $dateForm,
+                'charts' => $provider
+            ]);
+        }
+        return $this->render('index', [
+            'dateForm' => $dateForm
+        ]);
     }
 
     public function actionLogin()
