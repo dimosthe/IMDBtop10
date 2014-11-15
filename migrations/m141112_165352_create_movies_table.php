@@ -10,7 +10,6 @@ class m141112_165352_create_movies_table extends Migration
         $this->createTable('movies', [
             'id' => 'pk',
             'title' => Schema::TYPE_STRING . ' NOT NULL',
-            'year' => Schema::TYPE_STRING . ' NOT NULL',
         ]); 
 
     }

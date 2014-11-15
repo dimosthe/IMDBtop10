@@ -12,7 +12,7 @@ class m141112_170211_create_dates_movies_table extends Migration
             'date_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'movie_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'rank' => Schema::TYPE_SMALLINT . ' NOT NULL',
-            'rating' => Schema::TYPE_STRING . ' NOT NULL',
+            'was' => Schema::TYPE_STRING . ' NOT NULL',
         ]); 
         
         $this->addForeignKey('fk_dates_dates_movies', 'dates_movies', 'date_id', 'dates', 'id', 'CASCADE', 'CASCADE');
