@@ -22,6 +22,11 @@ class Dates extends \yii\db\ActiveRecord
         return 'dates';
     }
 
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->date =  date("d M Y", strtotime($this->date));
+    }
     /**
      * @inheritdoc
      */
@@ -51,4 +56,6 @@ class Dates extends \yii\db\ActiveRecord
     {
         return $this->hasMany(DatesMovies::className(), ['date_id' => 'id']);
     }
+
+    
 }

@@ -18,7 +18,6 @@ class DateForm extends Model
     {
         return [
 			['date', 'required'],
-			['date', 'date', 'format' => 'yyyy-M-d'],
 		];
 	}
 
@@ -34,7 +33,8 @@ class DateForm extends Model
 
     public function getDates()
     {
-    	$dates = Dates::find()->asArray()->all();
+    	$dates = Dates::find()->all();
+
     	return $dates;
     }
 }

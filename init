@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export PATH=$PATH:${PWD}:/foo/bar
+
+#*/2 * * * * ./yii imdbscraper/storerecords

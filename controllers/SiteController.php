@@ -26,7 +26,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays an archive of the top 10 movies on IMDB 
+     * Displays the top 10 movies on IMDB given a specific date 
      * @return mixed
      **/
     public function actionIndex()
@@ -94,6 +94,7 @@ class SiteController extends Controller
      */
     protected function findDate($date)
     {
+        $date =  date("Y-m-d", strtotime($date));
         $model = Dates::findOne(['date'=>$date]);
 
         if($model === null)
