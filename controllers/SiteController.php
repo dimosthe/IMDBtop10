@@ -3,123 +3,102 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 use app\models\DateForm;
 use app\models\Dates;
 use app\models\DatesMovies;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\web\NotFoundHttpException;
 
+/**
+ * Site controller
+ */
 class SiteController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     public function actions()
     {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
         ];
     }
 
+    /**
+     * Displays an archive of the top 10 movies on IMDB 
+     * @return mixed
+     **/
     public function actionIndex()
     {
 		$dateForm = new DateForm();	
-		if ($dateForm->load(Yii::$app->request->post()) && $dateForm->validate()) 
+		// if the user submited the form and sent the date properly
+        if (($dateForm->load(Yii::$app->request->post())) && $dateForm->validate()) 
         {
-             
-            $date = Dates::findOne([
-                'date'=>$dateForm->date
-            ]);
+            // check if the data are already stored in the cache
+            if( \Yii::$app->cache->get($dateForm->date) !== false)
+                $provider = \Yii::$app->cache->get($dateForm->date);
+            // if not, then fetch from the database
+            else
+            {
+                $date = $this->findDate($dateForm->date);
 
-
-            
-
-                $provider = new ActiveDataProvider([
-                    'query' => DatesMovies::find()
+                $query = DatesMovies::find()
                         ->where(['date_id' => $date->id])
                         ->orderBy('rank')
-    
+                        ->with('movie')->all(); // allow eager loading
+                
+                $provider = new ArrayDataProvider([
+                    'allModels'=>$query
                 ]);
+                
+                // cache the data
+                \Yii::$app->cache->set($dateForm->date, $provider, 60);     
+            }
 
-             return $this->render('index', [
+            return $this->render('index', [
                 'dateForm' => $dateForm,
-                'charts' => $provider
+                'charts' => $provider,
             ]);
         }
+    
         return $this->render('index', [
             'dateForm' => $dateForm
         ]);
     }
 
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
+    /**
+     * Displays contact information
+     * @return string
+     **/
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
+        return $this->render('contact');
     }
 
+    /**
+     * Displays about information
+     * @return string
+     **/
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Finds the Date model based on its date field
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param date                      $date
+     * @return app\models\Dates         the loaded model
+     * @throws NotFoundHttpException    if the model cannot be found
+     */
+    protected function findDate($date)
+    {
+        $model = Dates::findOne(['date'=>$date]);
+
+        if($model === null)
+           throw new NotFoundHttpException('The requested date does not exist in the archive'); 
+
+       return $model;
     }
 }

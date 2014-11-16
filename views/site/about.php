@@ -9,8 +9,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        This is the About page. You may modify the following file to customize its content:
+        The IMDB archive application maintaines a simple archive of the top 10 movies on IMDB. The archive is browsable by date
     </p>
-
-    <code><?= __FILE__ ?></code>
 </div>

@@ -30,6 +30,7 @@ $this->title = 'IMDB top ten movies';
     </div>
 </div>
 <?php if(isset($charts)){
+    
         echo GridView::widget([
             'dataProvider' => $charts,
             'columns' => [
@@ -37,14 +38,14 @@ $this->title = 'IMDB top ten movies';
                 [
                     'attribute'=>'movie_id',
                     'label'=>'title',
-                    'value'=>function ($model) {
-                        return $model->movie->title;
-                    }
+                    'value'=>'movie.title'
                 ],
                 'was'
 
             ]
             ]);
-}
-        
+}   
 ?>
+<script>
+$.pjax.reload({container:'#idofyourpjaxwidget'});
+</script>
