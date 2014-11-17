@@ -22,7 +22,7 @@ Deployment
 3. Run `composer install` in the root directory of the application in order to
    install dependencies. This will create the vendor directory with all
    package dependencies inlcuding the yii core source code.
-4. Create a new database with the name `imdbdb` and a new user `imdbuser` with password `password1!`.
+4. Create a new database with the name `imdbdb` and a new user `imdbuser` with password `password1!` (or edit the file `config/db.php` and give your own database name, user and password). 
 5. Run `./yii migrate` in the root directory to create the database tables.
 6. Run `./yii imdbscraper/storerecords` in the root directory to make an initial call to imdb and store the top ten movies for the current date.
 7. Create a cron job to execute the above script every day or week. 

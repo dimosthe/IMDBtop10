@@ -53,7 +53,6 @@ class ImdbscraperController extends Controller {
 				$date_movie->rank = $m['rank'];
 				$date_movie->was = $m['was'];
 				$date_movie->save();
-
 			}
 		}
 	}
@@ -66,33 +65,35 @@ class ImdbscraperController extends Controller {
 		// discard white space
 		$dom->preserveWhiteSpace = false;
 		
-		// get the div which includes the movies
+		// get the div with id="moviemeter" which includes the movies
 		$movies = $dom->getElementById("moviemeter");
 		if(!$movies)
 			return null;
 		
-		// get movies titles
-		$titles = $movies->getElementsByTagName("p");
-		// get the previous ranks
-		$previous_ranks = $movies->getElementsByTagName("span");
-
 		$charts = [];
-		for($i=0; $i<$this->limit; $i++)
-			$charts[$i] = ["title"=>trim($titles->item($i)->nodeValue), "rank"=> $i+1];
+		foreach ($movies->getElementsByTagName("div") as $div) 
+		{
+			$array = explode("#", $div->nodeValue);
+					
+			if(is_array($array) && count($array) == 2)
+			{
+				// get rank
+				$rank = trim(substr($array[1], 0, 3));
 		
-		$i = 0;
-		foreach ($previous_ranks as $rank) {
-			
-			if( preg_match( '!\(([^\)]+)\)!', $rank->nodeValue, $match ) ){
-    			$text = $match[1];
-    			$charts[$i]["was"] = $text;
-    			$i++;
-    			if($i == $this->limit)
-    				break;
+				//get was
+				if( preg_match( '!\(([^\)]+)\)!', $array[1], $match ) )
+	    			$was = $match[1];
+	    		
+				$charts[$rank] = ["title"=>trim($array[0]), "was"=>$was, "rank"=>$rank];
 			}
-			
 		}
-		return $charts;
+		foreach ($charts as $key => $value) 
+			$temp[$key] = $value["rank"];
 		
+		// sort by rank
+		array_multisort($temp, SORT_ASC, $charts);
+
+		// return the top <limit>
+		return array_slice($charts, 0, $this->limit);	
 	}	
 }
