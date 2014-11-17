@@ -38,4 +38,4 @@ How it works
 - The top 10 movies are stored in the database.
 - The scraper script runs every day or week (it depends on the cron job setup) to get the top movies for the current date.
 - A user selects an available date from the dropdown menu to get the top ten movies for that date.
-- A caching system prevents the database from being queried each time the data needs to be displayed. 
+- A caching system prevents the database from being queried each time the data needs to be displayed. The default yii2 caching layer is used which is based on files caching. However, another caching layer could be used like Memcached. 

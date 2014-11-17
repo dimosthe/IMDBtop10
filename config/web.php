@@ -14,11 +14,12 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
             /*'class' => 'yii\caching\MemCache',
+            'useMemcached'=>true,
             'servers' => [
-            
                 'host' => 'localhost',
                 'port' => 11211,
-                'weight' => 100,*/
+                'weight' => 1
+            ]*/
             
         ],
         'user' => [

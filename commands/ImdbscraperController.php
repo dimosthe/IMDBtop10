@@ -1,6 +1,7 @@
 <?php
 /**
- * ImdbScraper controller
+ * ImdbScraper script.
+ * Scrapes the IMDB charts page to get the top movies. 
  * @author George Dimosthenous
  */
 
@@ -11,11 +12,18 @@ use app\models\Movies;
 use app\models\Dates;
 use app\models\DatesMovies;
  
-
+/**
+ * ImdbScraper controller
+ */
 class ImdbscraperController extends Controller {
 	private $url = 'http://www.imdb.com/chart/?ref_=chttp_ql_1'; // imdb url displaying the charts
 	private $limit = 10; // the number of movies to return 
 
+	/**
+	 * Fetches a web page
+	 * @param $url
+	 * @return string
+	 **/
 	private function getUrl($url)
 	{
 		$page = file_get_contents($url);
@@ -23,6 +31,9 @@ class ImdbscraperController extends Controller {
 		return $page;			
 	}
 
+	/**
+	 * Stores the movies information in the database
+	 **/
 	public function actionStorerecords()
 	{
 		$charts = $this->parsehtml();
@@ -57,6 +68,10 @@ class ImdbscraperController extends Controller {
 		}
 	}
 
+	/**
+	 * Parses the imdb charts page and fetches the movies infomration 
+	 * @return array
+	 **/
 	private function parsehtml()
 	{
 		$html = $this->getUrl($this->url);

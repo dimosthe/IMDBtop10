@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @author George Dimosthenous
+ **/
 namespace app\controllers;
 
 use Yii;
@@ -52,8 +54,8 @@ class SiteController extends Controller
                     'allModels'=>$query
                 ]);
                 
-                // cache the data
-                \Yii::$app->cache->set($dateForm->date, $provider, 60);     
+                // cache the data for 1 day
+                \Yii::$app->cache->set($dateForm->date, $provider, 86400);   
             }
 
             return $this->render('index', [
