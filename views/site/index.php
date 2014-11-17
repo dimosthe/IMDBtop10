@@ -46,6 +46,3 @@ $this->title = 'IMDB top ten movies';
             ]);
 }   
 ?>
-<script>
-$.pjax.reload({container:'#idofyourpjaxwidget'});
-</script>
