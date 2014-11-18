@@ -30,7 +30,7 @@ Deployment
 How to test
 -----------
 1. You can use php build-in web server. Run `php -S localhost:8000` from the root directory.
-2. Point your browser to `http://localhost:8000/frontend/web`.
+2. Point your browser to `http://localhost:8000/web`.
 
 How it works
 ------------
