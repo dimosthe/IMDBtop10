@@ -25,7 +25,7 @@ class Dates extends \yii\db\ActiveRecord
     public function afterFind()
     {
         parent::afterFind();
-        $this->date =  date("d M Y", strtotime($this->date));
+        $this->date =  date("d M Y", strtotime($this->date)); // returns the date in day month year format
     }
     /**
      * @inheritdoc

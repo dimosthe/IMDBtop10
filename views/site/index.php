@@ -17,10 +17,9 @@ $this->title = 'IMDB top ten movies';
 
 
     </div>
- <div class="row">
+    <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'date-form']); ?>
-                
                 <?= $form->field($dateForm, 'date')->dropDownList(ArrayHelper::map($dateForm->getDates(), 'date', 'date'))  ?>
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
@@ -28,9 +27,7 @@ $this->title = 'IMDB top ten movies';
             <?php ActiveForm::end(); ?>
         </div>
     </div>
-</div>
-<?php if(isset($charts)){
-    
+    <?php if(isset($charts)){
         echo GridView::widget([
             'dataProvider' => $charts,
             'columns' => [
@@ -41,8 +38,8 @@ $this->title = 'IMDB top ten movies';
                     'value'=>'movie.title'
                 ],
                 'was'
-
             ]
-            ]);
-}   
-?>
+        ]);
+    }   
+    ?>
+</div>
